@@ -1,10 +1,21 @@
 function img = imeffects( img, effect )
 
 arguments
-    img (:,:,3) uint8 % RGB image
-    effect {mustBeMember(effect,["none","barrel","blur","edge","grayscale", ...
-        "negative","neon","pencil","pincushion","pixelate","quantize","wave"])}
+    img (:,:,3,:) uint8 % RGB image(s)
+    effect {mustBeMember(effect,["none","barrel","blur","edge","ghost", ...
+        "gotham","grayscale","hologram","negative","neon","pencil", ...
+        "pincushion","pixelate","quantize","wave"])}
 end
+
+persistent faceDetector mask
+if isempty( faceDetector )
+    faceDetector = vision.CascadeObjectDetector();
+    mask = load("masks.mat","batman");
+    mask = mask.batman;
+end
+
+frames = img;
+img = frames(:,:,:,end); % newest frame
 
 switch effect
     case "none"
@@ -21,8 +32,39 @@ switch effect
     case "edge"
         img = repmat( uint8( 255*edge( im2gray( img ) ) ), [1 1 3] );
 
+    case "ghost"
+        img = frames(:,:,:,end); % oldest frame, first background
+        n = size( frames, 4 );
+        for k = ((n-1):-1:1) % end with newest frame as final foreground
+            img = imblend( frames(:,:,:,k), img );
+        end
+
+    case "gotham"
+        % Requires Computer Vision Toolbox (face detection)
+        bbox = faceDetector( img );  % bounding box: [x y height width]
+        if ~isempty( bbox )
+            % Shift and scale mask by percentage of the face height/width
+            x = 1.1;  % scale mask width as percentage of face width
+            dx = (1-x)/2; % shift to center left/right on face
+            scale = x*bbox(1,4)/size( mask, 2 ); % scale mask columns by face width
+            bias = [-0.5 dx];  % shift up and use dx to center left/right
+            loc = bbox(1,[2 1]) + bias.*bbox(1,3:4); % location: [row column]
+            img = superImpose( img, imresize( mask, scale ), loc );
+        end
+        img = imadjust( img, [0.05 0.95], [0.2 1] );
+        img = imadjust( img, [0.2 0 0.2; 0.8 0.8 1], [], 1.4);
+        img = imnoise( img, "gaussian", 0, 0.0008 );
+
     case "grayscale"
         img = repmat( im2gray( img ), [1 1 3] );
+
+    case "hologram"
+        % 3D image for left to right motion when wearing red-cyan glasses
+        % (with lens over the left and right eyes respectively)
+        [rows,cols] = size( frames, 1:2 );
+        red  = newFilter(rows,cols,[255 0 0]);
+        cyan = newFilter(rows,cols,[0 255 255]);
+        img = (frames(:,:,:,1) - cyan) + (frames(:,:,:,end) - red);
 
     case "negative"
         img = imcomplement( img );
