@@ -56,7 +56,7 @@ switch effect
         % do nothing
 
     case "barrel"
-        img = imdistort( img, 0.3 );
+        img = imdistort( img, 4.8 );
 
     case "blur"
         scale = 0.1;
@@ -126,7 +126,7 @@ switch effect
         img = repmat( 255 - img, [1 1 3] );
 
     case "pincushion"
-        img = imdistort( img, -0.08 );
+        img = imdistort( img, -1.28 );
 
     case "pixelate"
         [nrows,ncols] = size( img, 1:2 );

@@ -1,36 +1,47 @@
-function img = imdistort( img, a )
+function img = imdistort( img, amp )
 
 %IMDISTORT Apply radial barrel or pincushion distortion to an RGB image.
 %
-%   IMG2 = IMDISTORT(IMG, A) returns a distorted version of the RGB image IMG.
-%   The scalar parameter A controls the amount and type of distortion:
-%       A > 0  produces barrel distortion (image bulges outward).
-%       A < 0  produces pincushion distortion (image is pinched inward).
+%   IMG2 = IMDISTORT(IMG, AMP) returns a distorted version of the RGB image IMG.
+%   The scalar parameter AMP controls the amount and type of distortion:
+%       AMP > 0  produces barrel distortion (image bulges outward).
+%       AMP < 0  produces pincushion distortion (image is pinched inward).
 %
 %   Inputs:
 %     IMG - M-by-N-by-3 uint8 RGB image.
-%     A   - scalar numeric distortion coefficient.
+%     AMP - scalar numeric distortion coefficient.
 %
 %   Output:
 %     IMG - distorted M-by-N-by-3 uint8 RGB image.
 
 arguments
     img (:,:,3) uint8 % RGB image
-    a (1,1) {mustBeNumeric} % > 0 for barrel, < 0 pincushion
+    amp (1,1) {mustBeNumeric} % > 0 for barrel, < 0 pincushion
 end
 
 % see also: https://www.mathworks.com/help/images/
 % creating-a-gallery-of-transformed-images.html
 
+% Create arrays of x/y coordinates of each pixel
+% with origin in upper-left corner of image
 [nrows,ncols] = size( img, 1:2 );
-
 [x,y] = meshgrid( 1:ncols, 1:nrows );
-[theta,r] = cart2pol( x(:)-ncols/2, y(:)-nrows/2 );
-s = r + (a/1e4)*(r.^3);
 
+% Shift origin to center of image and convert from
+% Cartesian x/y to cylindrical angle/radius (theta/r)
+x = x - ncols/2;
+y = y - nrows/2;
+[theta,r] = cart2pol( x, y );
+
+% Distort r nonlinearly with distance from center pixel
+rmax = max( r(:) );
+s = r + amp*(r.^3)/(rmax^2);
+
+% Convert back to Cartesian coordinates and 
+% shift origin back to upper-right corner of image
 [u,v] = pol2cart( theta, s );
-u = reshape( u+ncols/2, [nrows, ncols] );
-v = reshape( v+nrows/2, [nrows, ncols] );
+u = u + ncols/2;
+v = v + nrows/2;
 
 tmap = cat( 3, u, v );
 resamp = makeresampler( "linear", "fill" );
