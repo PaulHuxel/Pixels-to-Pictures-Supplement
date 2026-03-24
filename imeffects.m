@@ -1,48 +1,43 @@
 function img = imeffects( img, effect )
 
-%IMEFFECTS Apply stylized effects to an RGB image or sequence of RGB images.
+%IMEFFECTS Apply visual effects to an RGB image.
 %   IMG = IMEFFECTS(IMG, EFFECT) applies the specified EFFECT to the input
-%   image or image sequence IMG and returns the resulting image IMG.
+%   RGB image and returns the processed image.
 %
 %   Inputs
 %     IMG    - M-by-N-by-3-by-K uint8 array containing one or more RGB
-%              frames. Effects (except for "ghost" and "hologram") are
-%              applied only to the first frame. For sequence-aware effects,
-%              multiple frames may be used.
-%     EFFECT - A string specifying the effect to apply. Valid values are:
-%              "none", "barrel", "blur", "edge", "ghost", "gotham",
-%              "grayscale", "hologram", "kaleidoscope", "negative",
-%              "neon", "pencil", "pincushion", "pixelate", "quantize",
-%              "wave".
+%              frames. For single-frame operation K can be 1. Most effects
+%              operate only on the most recent frame (first frame along the
+%              4th dimension), while some effects use multiple frames to
+%              produce temporal effects.
+%
+%     EFFECT - String specifying the effect to apply. Valid values are:
+%              "none"         - no effect
+%              "barrel"       - barrel distortion
+%              "blur"         - pixel-scale blur
+%              "edge"         - edge map (binary edges)
+%              "ghost"        - temporal ghosting from multiple frames
+%              "gotham"       - mask + color adjustments (uses face detection)
+%              "grayscale"    - convert to grayscale
+%              "hologram"     - red/cyan stereoscopic effect using motion
+%              "kaleidoscope" - mirrored kaleidoscope with 6 sectors
+%              "negative"     - color negative (complement)
+%              "neon"         - morphological edge/neon effect
+%              "pencil"       - pencil sketch
+%              "pincushion"   - pincushion distortion
+%              "pixelate"     - blocky pixelation
+%              "quantize"     - color quantization
+%              "rc-pop"       - selective color pop in red/cyan hues
+%              "wave"         - sinusoidal horizontal warp
 %
 %   Output
-%     IMG    - M-by-N-by-3 uint8 RGB image with the chosen effect applied.
-%
-%   Description of selected effects
-%     "none"        - Return the input frame unchanged.
-%     "barrel"      - Apply a barrel (fisheye) distortion.
-%     "pincushion"  - Apply pincushion distortion (negative barrel).
-%     "blur"        - Fast box down/up sampling to simulate blur.
-%     "edge"        - Canny-like edge map rendered as a 3-channel image.
-%     "ghost"       - Blend multiple frames to create a ghosting trail.
-%     "gotham"      - Superimpose a mask on detected faces and apply color
-%                     grading/noise (requires Computer Vision Toolbox).
-%     "grayscale"   - Convert to luminance and replicate to RGB.
-%     "hologram"    - Create a red/cyan stereoscopic composite from first
-%                     and last frames.
-%     "kaleidoscope" - Create a kaleidoscopic tiling of the image.
-%     "negative"    - Photonegative of the image.
-%     "neon"        - Morphological edge extraction for a neon-like effect.
-%     "pencil"      - Pencil-sketch style rendering.
-%     "pixelate"    - Blocky pixelation using nearest-neighbor resampling.
-%     "quantize"    - Color-quantize the image into a small number of levels.
-%     "wave"        - Sinusoidal geometric warp.
+%     IMG - M-by-N-by-3 uint8 image containing the processed frame. 
 
 arguments
     img (:,:,3,:) uint8 % RGB image(s)
     effect {mustBeMember(effect,["none","barrel","blur","edge","ghost", ...
         "gotham","grayscale","hologram","kaleidoscope","negative","neon", ...
-        "pencil","pincushion","pixelate","quantize","wave"])}
+        "pencil","pincushion","pixelate","quantize","rc-pop","wave"])}
 end
 
 persistent faceDetector mask
@@ -135,7 +130,7 @@ switch effect
 
     case "pixelate"
         [nrows,ncols] = size( img, 1:2 );
-        scale = 64*[1 ncols/nrows];
+        scale = 96*[1 ncols/nrows];
         img = imresize( img, scale, "nearest" ); % "blocky" downsample
         img = imresize( img, [nrows,ncols], "nearest" ); % "blocky" upsample
 
@@ -144,6 +139,10 @@ switch effect
         thresh = multithresh( img, n );
         value = [0 thresh(2:end) 255];
         img = imquantize( img, thresh, value );
+
+    case "rc-pop"
+        % hue = (0:6)/6 = R-Y-G-C-B-M-R
+        img = isocolor( img, [3.5 5.9]/6, 0.03 );
 
     case "wave" % sinusoidal
         [nrows,ncols] = size( img, 1:2 );
