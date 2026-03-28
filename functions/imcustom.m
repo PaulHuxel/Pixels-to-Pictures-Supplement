@@ -16,6 +16,10 @@ gry = im2gray( img );
 img = ind2rgb8( gry, bone );  % <-- you can change the colormap here
 % img = ind2rgb8( gry, hsv ); % <-- for example replace bone with hsv
 
+% Or instead, you can isolate your favorite colors (divide by 6 to normalize)
+% Hues: 0-Red, 1-Yellow, 2-Green, 3-Cyan, 4-Blue, 5-Magenta, 6-Red
+% img = isocolor( img, [0.5 1.3]/6 ); % <-- for example orange and greenish
+
 % You can delete the code below to remove the text
 % (or change the "msg" variable to add your own text)
 msg = "Modify 'imcustom.m' to apply your own effect!" + newline ...
