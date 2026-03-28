@@ -13,8 +13,8 @@ function img = imcustom( img )
 % in the code below with one these other color maps:
 % https://www.mathworks.com/help/matlab/ref/colormap.html#buc3wsn-1-map
 gry = im2gray( img );
-img = ind2rgb8( gry, bone );  % <-- you can change the colormap here
-% img = ind2rgb8( gry, hsv ); % <-- for example replace bone with hsv
+img = ind2rgb( gry, bone );  % <-- you can change the colormap here
+% img = ind2rgb( gry, hsv ); % <-- for example replace bone with hsv
 
 % Or instead, you can isolate your favorite colors (divide by 6 to normalize)
 % Hues: 0-Red, 1-Yellow, 2-Green, 3-Cyan, 4-Blue, 5-Magenta, 6-Red

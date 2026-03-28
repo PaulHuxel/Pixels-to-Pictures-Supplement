@@ -112,7 +112,7 @@ switch effect
         img = isocolor( img, [3.5 5.9]/6, 0.03 );
 
     case "thermal"
-        img = ind2rgb8( im2gray( img ), thermal );
+        img = ind2rgb( im2gray( img ), thermal );
 
     case "wave" % sinusoidal
         [nrows,ncols] = size( img, 1:2 );
