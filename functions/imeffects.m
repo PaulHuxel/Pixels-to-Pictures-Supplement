@@ -1,53 +1,42 @@
 function img = imeffects( img, effect )
 
-%IMEFFECTS Apply visual effects to an RGB image.
-%   IMG = IMEFFECTS(IMG, EFFECT) applies the specified EFFECT to the input
-%   RGB image and returns the processed image.
+%IMEFFECTS Apply visual effects to RGB image(s).
+%   IMG = IMEFFECTS(IMG, EFFECT) applies the specified EFFECT to the
+%   RGB image or image sequence IMG and returns the processed image
+%   IMG. IMG must be an M-by-N-by-3-by-K uint8 array (K frames). For
+%   most effects only the first frame is processed; "ghost" and
+%   "hologram" use multiple frames.
 %
-%   Inputs
-%     IMG    - M-by-N-by-3-by-K uint8 array containing one or more RGB
-%              frames. For single-frame operation K can be 1. Most effects
-%              operate only on the most recent frame (first frame along the
-%              4th dimension), while some effects use multiple frames to
-%              produce temporal effects.
-%
-%     EFFECT - String specifying the effect to apply. Valid values are:
-%              "none"         - no effect
-%              "barrel"       - barrel distortion
-%              "blur"         - pixel-scale blur
-%              "edge"         - edge map (binary edges)
-%              "ghost"        - temporal ghosting from multiple frames
-%              "gotham"       - mask + color adjustments (uses face detection)
-%              "grayscale"    - convert to grayscale
-%              "hologram"     - red/cyan stereoscopic effect using motion
-%              "kaleidoscope" - mirrored kaleidoscope with 6 sectors
-%              "negative"     - color negative (complement)
-%              "neon"         - morphological edge/neon effect
-%              "pencil"       - pencil sketch
-%              "pincushion"   - pincushion distortion
-%              "pixelate"     - blocky pixelation
-%              "quantize"     - color quantization
-%              "rc-pop"       - selective color pop in red/cyan hues
-%              "wave"         - sinusoidal horizontal warp
-%
-%   Output
-%     IMG - M-by-N-by-3 uint8 image containing the processed frame. 
+%   Supported EFFECT values:
+%     "none"        - return the input unchanged
+%     "barrel"      - barrel lens distortion
+%     "blur"        - coarse blur via down/up sampling
+%     "edge"        - Canny edge (grayscale) rendered as white on black
+%     "ghost"       - temporal ghosting using all frames
+%     "gotham"      - stylized "Gotham" filter (requires CV Toolbox)
+%     "grayscale"   - convert to grayscale (replicated across 3 channels)
+%     "hologram"    - anaglyph stereo from first and last frame
+%     "kaleidoscope"- kaleidoscope tiling
+%     "negative"    - color negative
+%     "neon"        - difference of dilated/eroded image (outline)
+%     "matrix"      - "Matrix" style effect
+%     "pencil"      - pencil sketch effect
+%     "pincushion"  - pincushion lens distortion
+%     "pixelate"    - blocky pixelation
+%     "quantize"    - color quantization (k = 8)
+%     "rc-pop"      - red/cyan color pop
+%     "thermal"     - thermal colormap rendering
+%     "wave"        - horizontal sinusoidal warp
+%     "custom"      - user-supplied custom filter via IMCUSTOM
 
 arguments
     img (:,:,3,:) uint8 % RGB image(s)
-    effect {mustBeMember(effect,["none","barrel","blur","edge","ghost", ...
-        "gotham","grayscale","hologram","kaleidoscope","negative","neon", ...
-        "pencil","pincushion","pixelate","quantize","rc-pop","wave"])}
+    effect {mustBeMember(effect,["none","barrel","blur","edge","ghost", "gotham", ...
+        "grayscale","hologram","kaleidoscope","negative","neon", "matrix", "pencil", ...
+        "pincushion","pixelate","quantize","rc-pop","thermal","wave","custom"])}
 end
 
-persistent faceDetector mask
-if isempty( faceDetector )
-    faceDetector = vision.CascadeObjectDetector();
-    mask = load("masks.mat","batman");
-    mask = mask.batman;
-end
-
-% Except for "ghost" and "hologram", effects are only applied to the first frame.
+% Except for "ghost" and "hologram", effects are only applied to first frame
 frames = img;
 img = frames(:,:,:,1); % newest frame
 
@@ -74,43 +63,21 @@ switch effect
 
     case "gotham"
         % Requires Computer Vision Toolbox (face detection)
-        bbox = faceDetector( img );  % bounding box: [x y height width]
-        for k = 1:size(bbox,1)
-            % Shift and scale mask by percentage of the face height/width
-            x = 1.1;  % scale mask width as percentage of face width
-            dx = (1-x)/2; % shift to center left/right on face
-            scale = x*bbox(k,4)/size( mask, 2 ); % scale mask columns by face width
-            bias = [-0.5 dx];  % shift up and use dx to center left/right
-            loc = bbox(k,[2 1]) + bias.*bbox(k,3:4); % location: [row column]
-            img = superImpose( img, imresize( mask, scale ), loc );
-        end
-        img = imadjust( img, [0.05 0.95], [0.2 1] );
-        img = imadjust( img, [0.2 0 0.2; 0.8 0.8 1], [], 1.4);
-        img = imnoise( img, "gaussian", 0, 0.0008 );
+        img = gotham( img );
 
     case "grayscale"
         img = repmat( im2gray( img ), [1 1 3] );
 
     case "hologram"
         % 3D image for horizontal motion when wearing red-cyan glasses
-        % (with red-cyan lens over left-right eyes respectively,
-        % "cyan image" should appear to be left of "red image")
-        [rows,cols] = size( frames, 1:2 );
-        red  = newFilter(rows,cols,[255 0 0]);
-        cyan = newFilter(rows,cols,[0 255 255]);
-        img1 = frames(:,:,:,1);   % current frame
-        img2 = frames(:,:,:,end); % older frame
-        xdir = xmotion( img1, img2 );
-        if (xdir < 0) % right to left motion
-            % -> older frame should be red image (by subtracting cyan)
-            img = (img2 - cyan) + (img1 - red);
-        else  % left to right motion
-            % -> current frame should be red image (by subtracting cyan)
-            img = (img1 - cyan) + (img2 - red);
-        end
+        % (with red-cyan lens over left-right eyes respectively)
+        img = anaglyph( frames(:,:,:,1), frames(:,:,:,end), Motion=true );
 
     case "kaleidoscope"
         img = kaleidoscope( img, 6 );
+
+    case "matrix"
+        img = matrix( img );
 
     case "negative"
         img = imcomplement( img );
@@ -144,6 +111,9 @@ switch effect
         % hue = (0:6)/6 = R-Y-G-C-B-M-R
         img = isocolor( img, [3.5 5.9]/6, 0.03 );
 
+    case "thermal"
+        img = ind2rgb8( im2gray( img ), thermal );
+
     case "wave" % sinusoidal
         [nrows,ncols] = size( img, 1:2 );
         a = ncols/12;
@@ -152,28 +122,21 @@ switch effect
         oview = imref2d( [nrows,ncols] );
         img = imwarp( img, tform, OutputView=oview, FillValues=0 );
 
-end
+    case "custom"
+        sz = size( img, 1:2 );
+        img = imcustom( img );
+        
+        % Ensure proper size and type
+        if ~isequal( size(img,1:2), sz )
+            img = imresize( img, sz );
+        end
+        if (size(img,3) == 1)
+            img = repmat( img, [1 1 3] );
+        end
+        if (class(img) ~= "uint8")
+            img = im2uint8( img );
+        end
 
-end
-
-%% 
-function xdir = xmotion( img1, img2 )
-
-% Compare differences in images to determine horizontal motion
-thresh = 170;
-dI12 = imadjust( im2gray( imsubtract( img1, img2) ) );
-dI21 = imadjust( im2gray( imsubtract( img2, img1) ) );
-
-% Compute weighted mean to estimate x location of difference
-npts12 = sum( dI12 > thresh, 1 ); % number of points per column
-npts21 = sum( dI21 > thresh, 1 ); % number of points per column
-x12 = sum( (1:numel(npts12)).*npts12 )/sum( npts12 );
-x21 = sum( (1:numel(npts21)).*npts21 )/sum( npts21 );
-
-if (x21 > x12)
-    xdir = -1; % right to left motion
-else
-    xdir = 1;  % left to right motion
 end
 
 end
