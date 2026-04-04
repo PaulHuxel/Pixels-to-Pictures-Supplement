@@ -10,8 +10,8 @@ function mask = colorMask( img, hue, opts )
 arguments
     img (:,:,3) uint8 % hue = (0:6)/6 = R-Y-G-C-B-M-R
     hue double {mustBeVector,mustBeBetween(hue,0,1)} % [0 1]
-    opts.HueTol double {mustBeVector,mustBeBetween(opts.HueTol,0,0.5)} = 0.1
-    opts.SatValLim double {mustBeVector,mustBeBetween(opts.SatValLim,0,1)} = 0.2
+    opts.HueTol double {mustBeVector,mustBeBetween(opts.HueTol,0,0.5)} = 0.05
+    opts.SatValLim double {mustBeVector,mustBeBetween(opts.SatValLim,0,1)} = [0.5 0.3]
 end
 
 % Replicate tolerance for each color (if vector not provided)
