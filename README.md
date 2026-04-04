@@ -18,7 +18,7 @@ To use the app, you must first open the supplemental project by double-clicking 
 
 **Requires:** *MATLAB R2024b (or newer)*
 
-### App Effects
+### Supplemental Effects (available with app)
 * `chroma` : isolate your favorite color in an otherwise grayscale image 
 * `cloak` : don a colored cloak and disappear into the background<sup>#</sup>
 * `ghost` : leave a trail of yourself behind as you move
