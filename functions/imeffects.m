@@ -1,21 +1,16 @@
 function img = imeffects( img, effect )
 
 %IMEFFECTS Apply visual effects to RGB image(s).
-%   IMG = IMEFFECTS(IMG, EFFECT) applies the specified EFFECT to the
-%   RGB image or image sequence IMG and returns the processed image
-%   IMG. IMG must be an M-by-N-by-3-by-K uint8 array (K frames). For
-%   most effects only the first frame is processed; "ghost" and
-%   "hologram" use multiple frames.
+%   IMG = IMEFFECTS(IMG, EFFECT) applies the specified EFFECT 
+%     to the RGB image and returns the processed image IMG.
 %
 %   Supported EFFECT values:
 %     "none"        - return the input unchanged
 %     "barrel"      - barrel lens distortion
 %     "blur"        - coarse blur via down/up sampling
 %     "edge"        - Canny edge (grayscale) rendered as white on black
-%     "ghost"       - temporal ghosting using all frames
 %     "gotham"      - stylized "Gotham" filter (requires CV Toolbox)
 %     "grayscale"   - convert to grayscale (replicated across 3 channels)
-%     "hologram"    - anaglyph stereo from first and last frame
 %     "kaleidoscope"- kaleidoscope tiling
 %     "negative"    - color negative
 %     "neon"        - difference of dilated/eroded image (outline)
@@ -24,21 +19,17 @@ function img = imeffects( img, effect )
 %     "pincushion"  - pincushion lens distortion
 %     "pixelate"    - blocky pixelation
 %     "quantize"    - color quantization (k = 8)
-%     "rc-pop"      - red/cyan color pop
 %     "thermal"     - thermal colormap rendering
 %     "wave"        - horizontal sinusoidal warp
 %     "custom"      - user-supplied custom filter via IMCUSTOM
 
 arguments
-    img (:,:,3,:) uint8 % RGB image(s)
-    effect {mustBeMember(effect,["none","barrel","blur","edge","ghost", "gotham", ...
-        "grayscale","hologram","kaleidoscope","negative","neon", "matrix", "pencil", ...
-        "pincushion","pixelate","quantize","rc-pop","thermal","wave","custom"])}
+    img (:,:,3) uint8 % RGB image(s)
+    effect {mustBeMember(effect,["none","barrel","blur", ...
+        "edge","gotham","grayscale","kaleidoscope", ...
+        "negative","neon","matrix","pencil","pincushion","pixelate", ...
+        "quantize","rc-pop","thermal","wave","custom"])}
 end
-
-% Except for "ghost" and "hologram", effects are only applied to first frame
-frames = img;
-img = frames(:,:,:,1); % newest frame
 
 switch effect
     case "none"
@@ -54,24 +45,12 @@ switch effect
     case "edge"
         img = repmat( uint8( 255*edge( im2gray( img ) ) ), [1 1 3] );
 
-    case "ghost"
-        img = frames(:,:,:,end); % oldest frame, first background
-        n = size( frames, 4 );
-        for k = ((n-1):-1:1) % end with newest frame as final foreground
-            img = imblend( frames(:,:,:,k), img, ForegroundOpacity=0.7 );
-        end
-
     case "gotham"
         % Requires Computer Vision Toolbox (face detection)
         img = gotham( img );
 
     case "grayscale"
         img = repmat( im2gray( img ), [1 1 3] );
-
-    case "hologram"
-        % 3D image for horizontal motion when wearing red-cyan glasses
-        % (with red-cyan lens over left-right eyes respectively)
-        img = anaglyph( frames(:,:,:,1), frames(:,:,:,end), Motion=true );
 
     case "kaleidoscope"
         img = kaleidoscope( img, 6 );
@@ -106,10 +85,6 @@ switch effect
         thresh = multithresh( img, n );
         value = [0 thresh(2:end) 255];
         img = imquantize( img, thresh, value );
-
-    case "rc-pop"
-        % hue = (0:6)/6 = R-Y-G-C-B-M-R
-        img = isocolor( img, [3.5 5.9]/6, 0.03 );
 
     case "thermal"
         img = ind2rgb( im2gray( img ), thermal );
