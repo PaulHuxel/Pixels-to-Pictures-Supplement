@@ -24,6 +24,7 @@ To use the app, you must first open the supplemental project by double-clicking 
 * `ghost` : leave a trail of yourself behind as you move
 * `gotham` : mask-up to become the knight of a dark and gritty city (*requires Computer Vision Toolbox*™)
 * `hologram` : create a 3D effect as you move (when wearing red-cyan 3D glasses)
+* `hyperspace` : traveling through it ain't like dustin' crops... punch it!
 * `kaleidoscope` : create symmetrical, mirrored patterns (of the lower right portion of the video frame) 
 * `matrix` : enter the digital realm of green code and raining pixels
 * `pixelate` : apply a blocky pixelation effect to reduce the image resolution

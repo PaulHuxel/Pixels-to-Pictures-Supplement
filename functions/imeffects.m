@@ -1,34 +1,35 @@
 function img = imeffects( img, effect )
 
-%IMEFFECTS Apply visual effects to RGB image(s).
-%   IMG = IMEFFECTS(IMG, EFFECT) applies the specified EFFECT 
-%     to the RGB image and returns the processed image IMG.
+%IMEFFECTS Apply named visual effects to an RGB image.
 %
-%   Supported EFFECT values:
-%     "none"        - return the input unchanged
-%     "barrel"      - barrel lens distortion
-%     "blur"        - coarse blur via down/up sampling
-%     "edge"        - Canny edge (grayscale) rendered as white on black
-%     "gotham"      - stylized "Gotham" filter (requires CV Toolbox)
-%     "grayscale"   - convert to grayscale (replicated across 3 channels)
-%     "kaleidoscope"- kaleidoscope tiling
-%     "negative"    - color negative
-%     "neon"        - difference of dilated/eroded image (outline)
-%     "matrix"      - "Matrix" style effect
-%     "pencil"      - pencil sketch effect
-%     "pincushion"  - pincushion lens distortion
-%     "pixelate"    - blocky pixelation
-%     "quantize"    - color quantization (k = 8)
-%     "thermal"     - thermal colormap rendering
-%     "wave"        - horizontal sinusoidal warp
-%     "custom"      - user-supplied custom filter via IMCUSTOM
+%   IMG = IMEFFECTS(IMG, EFFECT) applies the specified EFFECT to the RGB
+%   image IMG and returns the resulting image. IMG must be an M-by-N-by-3
+%   uint8 image. EFFECT is one of the following strings:
+%
+%       "none"         - Return the input image unchanged.
+%       "barrel"       - Barrel distortion.
+%       "blur"         - Simple blur via down/up sampling.
+%       "edge"         - Edge map (grayscale edges replicated across channels).
+%       "gotham"       - Gotham-style effect (requires Computer Vision Toolbox).
+%       "grayscale"    - Convert to grayscale (replicated to three channels).
+%       "hyperspace"   - Add hyperspace animation overlay.
+%       "kaleidoscope" - Kaleidoscope effect.
+%       "matrix"       - Matrix-style effect.
+%       "negative"     - Photonegative (color complement).
+%       "neon"         - Neon/outline effect using morphological operations.
+%       "pencil"       - Pencil-sketch style.
+%       "pincushion"   - Pincushion distortion.
+%       "pixelate"     - Pixelation (blocky down/up sampling).
+%       "quantize"     - Color quantization to a small palette.
+%       "thermal"      - Thermal colormap mapping of grayscale.
+%       "wave"         - Sinusoidal geometric warp (wave).
+%       "custom"       - Call user-defined IMCUSTOM to perform custom processing.
 
 arguments
     img (:,:,3) uint8 % RGB image(s)
-    effect {mustBeMember(effect,["none","barrel","blur", ...
-        "edge","gotham","grayscale","kaleidoscope", ...
-        "negative","neon","matrix","pencil","pincushion","pixelate", ...
-        "quantize","rc-pop","thermal","wave","custom"])}
+    effect {mustBeMember(effect,["none","barrel","blur","edge","gotham", ...
+        "grayscale","hyperspace","kaleidoscope","matrix","negative","neon", ...
+        "pencil","pincushion","pixelate","quantize","thermal","wave","custom"])}
 end
 
 switch effect
@@ -51,6 +52,9 @@ switch effect
 
     case "grayscale"
         img = repmat( im2gray( img ), [1 1 3] );
+
+    case "hyperspace"
+        img = addAnimation( img, which( "hyperspace.mat" ) );
 
     case "kaleidoscope"
         img = kaleidoscope( img, 6 );
