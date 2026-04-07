@@ -1,4 +1,4 @@
-# Pixels to Pictures Supplemental Material [![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=PaulHuxel/Pixels-to-Pictures-Supplement&project=P2P-Supplement.prj)
+# Pixels to Pictures Supplemental Material &nbsp; &nbsp; [![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=PaulHuxel/Pixels-to-Pictures-Supplement&project=P2P-Supplement.prj)
 
 "[Pixels to Pictures](https://www.mathworks.com/matlabcentral/fileexchange/179159-pixels-to-pictures)" is free courseware authored by MathWorks® to help teach students "the basics of programming while they edit images, build GIFs, and create color filters and face masks that are applied in popular apps."  
 
