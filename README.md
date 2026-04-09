@@ -14,8 +14,11 @@ The supplemental lessons can be used in one of two ways:
 
 2) *Or*, if you already have the base [Pixels to Pictures](https://github.com/mathworks/PixelsToPictures) content installed with the corresponding `PixelstoPictures.prj` project open, you can run these supplemental lessons by navigating to the supplemental "lessons" folder in MATLAB. (This approach provides direct access the [Image Library](https://github.com/mathworks/PixelsToPictures/tree/main/Image%20Library) that comes with Pixels to Pictures.)
 
-## Web Cam Pixelater App
-To use the app, you must first open the supplemental project by double-clicking on the `P2P-Supplement.prj` project file from the MATLAB [File Panel](https://www.mathworks.com/help/matlab/ref/filespanel.html). This sets everything up for you, and needs to be done each time you open MATLAB and want to run the app. The app can then be run using the "SHORTCUTS" on the "PROJECT" tab of toolstrip at the top of MATLAB.
+## Web Cam Pixelater App &nbsp; [![Pixelater Icon](apps\pixelater_24.png "Launch App in MATLAB Online")](https://matlab.mathworks.com/open/github/v1?repo=PaulHuxel/Pixels-to-Pictures-Supplement&project=P2P-Supplement.prj&file=apps/WebCamPixelater.mlapp&focus=true)
+
+Click the Pixelater (color camera) icon above to launch the app in MATLAB Online. This also installs the supplemental lessons and supporting functions, and automatically opens the supplemental project.
+
+*Otherwise* (and in general), to use the app you must first manually open the supplemental project by double-clicking on the `P2P-Supplement.prj` project file from the MATLAB [File Panel](https://www.mathworks.com/help/matlab/ref/filespanel.html). This sets everything up for you, and needs to be done each time you open MATLAB and want to run the app. The app can then be run using the "SHORTCUTS" on the "PROJECT" tab of toolstrip at the top of MATLAB.
 
 **Requires:** *MATLAB R2024b (or newer)*
 
