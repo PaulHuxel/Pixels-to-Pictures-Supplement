@@ -25,6 +25,7 @@ Click the Pixelater (color camera) icon above to launch the app in MATLAB Online
 ### Supplemental Effects (available with app)
 * `chroma` : isolate your favorite color in an otherwise grayscale image 
 * `cloak` : don a colored cloak and disappear into the background<sup>#</sup>
+* `comic` : create a comic book cartoon-like effect
 * `ghost` : leave a trail of yourself behind as you move
 * `gotham` : mask-up to become the knight of a dark and gritty city (*requires Computer Vision Toolbox*™)
 * `hologram` : create a 3D effect as you move (when wearing red-cyan 3D glasses)

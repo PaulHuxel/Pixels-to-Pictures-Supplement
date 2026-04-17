@@ -9,6 +9,7 @@ function img = imeffects( img, effect )
 %       "none"         - Return the input image unchanged.
 %       "barrel"       - Barrel distortion.
 %       "blur"         - Simple blur via down/up sampling.
+%       "comic"        - Comic book cartoon-like effect.
 %       "edge"         - Edge map (grayscale edges replicated across channels).
 %       "gotham"       - Gotham-style effect (requires Computer Vision Toolbox).
 %       "grayscale"    - Convert to grayscale (replicated to three channels).
@@ -27,7 +28,7 @@ function img = imeffects( img, effect )
 
 arguments
     img (:,:,3) uint8 % RGB image(s)
-    effect {mustBeMember(effect,["none","barrel","blur","edge","gotham", ...
+    effect {mustBeMember(effect,["none","barrel","blur","comic","edge","gotham", ...
         "grayscale","hyperspace","kaleidoscope","matrix","negative","neon", ...
         "pencil","pincushion","pixelate","quantize","thermal","wave","custom"])}
 end
@@ -42,6 +43,9 @@ switch effect
     case "blur"
         scale = 0.1;
         img = imresize( imresize( img, scale ), 1/scale );
+
+    case "comic"
+        img = comic( img, "smooth", 1 );
 
     case "edge"
         img = repmat( uint8( 255*edge( im2gray( img ) ) ), [1 1 3] );
