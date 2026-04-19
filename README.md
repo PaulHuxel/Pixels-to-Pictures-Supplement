@@ -14,7 +14,7 @@ The supplemental lessons can be used in one of two ways:
 
 2) *Or*, if you already have the base [Pixels to Pictures](https://github.com/mathworks/PixelsToPictures) content installed with the corresponding `PixelstoPictures.prj` project open, you can run these supplemental lessons by navigating to the supplemental "lessons" folder in MATLAB. (This approach provides direct access the [Image Library](https://github.com/mathworks/PixelsToPictures/tree/main/Image%20Library) that comes with Pixels to Pictures.)
 
-## Web Cam Pixelater App &nbsp; [![Pixelater Icon](apps/pixelater_24.png "Launch App in MATLAB Online")](https://matlab.mathworks.com/open/github/v1?repo=PaulHuxel/Pixels-to-Pictures-Supplement&project=P2P-Supplement.prj&file=apps/WebCamPixelater.mlapp&focus=true)
+## Web Cam Pixelater App &nbsp; [![Pixelater Icon](apps/pixelater_24.png "Launch App in MATLAB Online")](https://matlab.mathworks.com/open/github/v1?repo=PaulHuxel/Pixels-to-Pictures-Supplement&project=P2P-Supplement.prj&file=apps/WebCamPixelater.mlapp)
 
 Click the Pixelater (color camera) icon above to launch the app in MATLAB Online. This also installs the supplemental lessons and supporting functions, and automatically opens the supplemental project.
 
