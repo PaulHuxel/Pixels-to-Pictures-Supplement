@@ -45,7 +45,7 @@ switch effect
         img = imresize( imresize( img, scale ), 1/scale );
 
     case "comic"
-        img = comic( img, "smooth", 1 );
+        img = comic( img, Abstraction="smooth", Iterations=1  );
 
     case "edge"
         img = repmat( uint8( 255*edge( im2gray( img ) ) ), [1 1 3] );
