@@ -17,13 +17,13 @@ The supplemental lessons can be used in one of two ways:
 
 ### Lesson Summary
 
-* [Lesson 2: Combining Images and Matrices (Pixel Art)](lessons/html/FlagConcatenate.html)
-* [Lesson 5: Applying Color Filters to Create 2-Tone Images](lessons/html/Create2ToneImage.html)
-* [Lesson 5: Applying Color Filters to Filter 2-Tone Images](lessons/html/Filter2ToneImage.html)
-* [Lesson 5: Applying Color Filters to Create 3-D Images](lessons/html/Create3DImage.html)
-* [Lesson 7: Creating Complex Color Filters](lessons/html/FlagFilters.html)
-* [Lesson 8: Applying Masks using Face Detection](lessons/html/ApplyFaceMask.html)
-* [Lesson 9: Creating Video Montage and Flipbooks](lessons/html/AnimateSheet.html)
+* [Lesson 2: Combining Images and Matrices (Pixel Art)](lessons/pdf/FlagConcatenate.pdf)
+* [Lesson 5: Applying Color Filters to Create 2-Tone Images](lessons/pdf/Create2ToneImage.pdf)
+* [Lesson 5: Applying Color Filters to Filter 2-Tone Images](lessons/pdf/Filter2ToneImage.pdf)
+* [Lesson 5: Applying Color Filters to Create 3-D Images](lessons/pdf/Create3DImage.pdf)
+* [Lesson 7: Creating Complex Color Filters](lessons/pdf/FlagFilters.pdf)
+* [Lesson 8: Applying Masks using Face Detection](lessons/pdf/ApplyFaceMask.pdf)
+* [Lesson 9: Creating Video Montage and Flipbooks](lessons/pdf/AnimateSheet.pdf)
 
 ## Webcam Pixelater App &nbsp; [![Pixelater Icon](apps/pixelater_24.png "Launch App in MATLAB Online")](https://matlab.mathworks.com/open/github/v1?repo=PaulHuxel/Pixels-to-Pictures-Supplement&project=P2P-Supplement.prj&file=apps/WebCamPixelater.mlapp)
 
