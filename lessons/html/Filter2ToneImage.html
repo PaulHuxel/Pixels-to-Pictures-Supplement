@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,IE=9,chrome=1"><meta name="generator" content="MATLAB 2026a"><title>Lesson 5: Applying Color Filters to Images</title><style type="text/css">.rtcContent { padding: 30px; } .S0 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 28.8px; min-height: 0px; white-space: pre; color: rgb(192, 76, 11); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 24px; font-weight: 400; text-align: left;  }
+._richTextNode {white-space: break-spaces;}
+.S1 { margin: 20px 10px 5px 4px; padding: 0px; line-height: 25px; min-height: 0px; white-space: pre; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 20px; font-weight: 700; text-align: left;  }
+.S2 { margin: 10px 10px 5px 4px; padding: 0px; line-height: 18px; min-height: 0px; white-space: pre; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 15px; font-weight: 700; text-align: left;  }
+.S3 { margin: 2px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 400; text-align: left;  }
+.CodeBlock { background-color: #F5F5F5; margin: 10px 0 10px 0; }
+.S4 { border-left: 0.666667px solid rgb(217, 217, 217); border-right: 0.666667px solid rgb(217, 217, 217); border-top: 0.666667px solid rgb(217, 217, 217); border-bottom: 0px none rgb(33, 33, 33); border-radius: 4px 4px 0px 0px; padding: 6px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S5 { border-left: 0.666667px solid rgb(217, 217, 217); border-right: 0.666667px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0px none rgb(33, 33, 33); border-radius: 0px; padding: 0px 45px 0px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S6 { border-left: 0.666667px solid rgb(217, 217, 217); border-right: 0.666667px solid rgb(217, 217, 217); border-top: 0px none rgb(33, 33, 33); border-bottom: 0.666667px solid rgb(217, 217, 217); border-radius: 0px 0px 4px 4px; padding: 0px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }
+.S7 { margin: 10px 10px 9px 4px; padding: 0px; line-height: 21px; min-height: 0px; white-space: pre; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 14px; font-weight: 400; text-align: left;  }
+.S8 { margin: 3px 10px 5px 4px; padding: 0px; line-height: 18px; min-height: 0px; white-space: pre; color: rgb(33, 33, 33); font-family: Helvetica, Arial, sans-serif, Helvetica, Arial, sans-serif; font-style: normal; font-size: 15px; font-weight: 700; text-align: left;  }
+.S9 { border-left: 0.666667px solid rgb(217, 217, 217); border-right: 0.666667px solid rgb(217, 217, 217); border-top: 0.666667px solid rgb(217, 217, 217); border-bottom: 0.666667px solid rgb(217, 217, 217); border-radius: 4px; padding: 6px 45px 4px 13px; line-height: 18.004px; min-height: 0px; white-space: nowrap; color: rgb(33, 33, 33); font-family: Menlo, Monaco, Consolas, "Courier New", monospace, Menlo, Monaco, Consolas, "Courier New", monospace; font-size: 14px;  }</style></head><body><div class = rtcContent><h1  class = 'S0'><span class="_richTextNode">Lesson 5: Applying Color Filters to Images</span></h1><h2  class = 'S1'><span class="_richTextNode">How to Filter a Two-Tone Image with MATLAB</span></h2><h4  class = 'S2'><span class="_richTextNode">Read and Show a Two-Tone Image</span></h4><div  class = 'S3'><span class="_richTextNode">The </span><span class="_richTextNode" style=' font-family: monospace;'>fileName</span><span class="_richTextNode"> below links to a two-tone image.  Or, with your sidekicks permission, feel free to find your own on the internet by searching for "red blue double exposure" images.  Then, while wearing 3D glasses, try closing one eye at a time....</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >fileName = </span><span style="color: rgb(167, 9, 245);">"https://freight.cargo.site/w/1340/i/a36a16cdf5722226d49a4a9f5797" </span><span >+ </span><span style="color: rgb(14, 0, 255);">...</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >    </span><span style="color: rgb(167, 9, 245);">"a2863215d1f1da0d1d08f4064bb6c2442582/13-046-lynx-BETES-DE-MODE-DIMETTO_o.jpg"</span><span >;</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >I = imread(fileName);</span></span></div></div><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre"><span >imshow(I)</span></span></div></div></div><div  class = 'S7'><span class="_richTextNode">We'll use MATLAB to filter out colors just like the 3D glasses.  To do so, we'll be using the </span><span class="_richTextNode" style=' font-family: monospace;'>newFilter</span><span class="_richTextNode"> function from the </span><a href = "https://www.mathworks.com/matlabcentral/fileexchange/179159-pixels-to-pictures"><span class="_richTextNode">Pixels to Pictures</span></a><span class="_richTextNode"> courseware.</span></div><h4  class = 'S8'><span class="_richTextNode">Create Color Filters</span></h4><div  class = 'S3'><span class="_richTextNode">In order to use these filters they must be the same size as our image.  We can use the </span><span class="_richTextNode" style=' font-family: monospace;'>size</span><span class="_richTextNode"> function to determine the size of an image (or array).  This function returns an array with values for the size along each dimension.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S9'><span style="white-space: pre"><span >sz = size(I)</span></span></div></div></div><div  class = 'S7'><span class="_richTextNode">Recall, images have three dimensions: rows, columns, and pages.  So the variable </span><span class="_richTextNode" style=' font-family: monospace;'>sz</span><span class="_richTextNode"> contains the number of rows, the number of columns, and the number of pages, respectively.  We can then extract these values using what we previously learned about indexing.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >rows = sz(1);</span></span></div></div><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre"><span >cols = sz(2);</span></span></div></div></div><div  class = 'S7'><span class="_richTextNode">We'll set the RGB values of these filters to match the two colors of our 3D glasses: red and cyan (green/blue).  Recall we specify colors using Red, Green, and Blue (RGB) values, which range from 0 to 255.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >red  = [255 0 0];</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >cyan = [0 255 255];</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >R = newFilter(rows,cols,red);</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >C = newFilter(rows,cols,cyan);</span></span></div></div><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre"><span >imshowpair(R,C,</span><span style="color: rgb(167, 9, 245);">'montage'</span><span >)</span></span></div></div></div><h4  class = 'S8'><span class="_richTextNode">Use Filters to Remove Opposite Color from Each Image</span></h4><div  class = 'S3'><span class="_richTextNode">We can extract the cyan-toned image by filtering out all the red shades; and we can extract the red-tone image by filtering out all the cyan shades.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S4'><span style="white-space: pre"><span >Icyan = I - R;  </span><span style="color: rgb(0, 128, 19);">% remove red</span></span></div></div><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >Ired  = I - C;  </span><span style="color: rgb(0, 128, 19);">% remove cyan</span></span></div></div><div class="inlineWrapper"><div  class = 'S6'><span style="white-space: pre"><span >imshowpair(Icyan,Ired,</span><span style="color: rgb(167, 9, 245);">'montage'</span><span >)</span></span></div></div></div>
+<br>
+<!-- 
+##### SOURCE BEGIN #####
+%% Lesson 5: Applying Color Filters to Images
+%% How to Filter a Two-Tone Image with MATLAB
+% Read and Show a Two-Tone Image
+% The |fileName| below links to a two-tone image.  Or, with your sidekicks permission, 
+% feel free to find your own on the internet by searching for "red blue double 
+% exposure" images.  Then, while wearing 3D glasses, try closing one eye at a 
+% time....
+
+fileName = "https://freight.cargo.site/w/1340/i/a36a16cdf5722226d49a4a9f5797" + ...
+    "a2863215d1f1da0d1d08f4064bb6c2442582/13-046-lynx-BETES-DE-MODE-DIMETTO_o.jpg";
+I = imread(fileName);
+imshow(I)
+%% 
+% We'll use MATLAB to filter out colors just like the 3D glasses.  To do so, 
+% we'll be using the |newFilter| function from the <https://www.mathworks.com/matlabcentral/fileexchange/179159-pixels-to-pictures 
+% Pixels to Pictures> courseware.
+% Create Color Filters
+% In order to use these filters they must be the same size as our image.  We 
+% can use the |size| function to determine the size of an image (or array).  This 
+% function returns an array with values for the size along each dimension.
+
+sz = size(I)
+%% 
+% Recall, images have three dimensions: rows, columns, and pages.  So the variable 
+% |sz| contains the number of rows, the number of columns, and the number of pages, 
+% respectively.  We can then extract these values using what we previously learned 
+% about indexing.
+
+rows = sz(1);
+cols = sz(2);
+%% 
+% We'll set the RGB values of these filters to match the two colors of our 3D 
+% glasses: red and cyan (green/blue).  Recall we specify colors using Red, Green, 
+% and Blue (RGB) values, which range from 0 to 255.
+
+red  = [255 0 0];
+cyan = [0 255 255];
+R = newFilter(rows,cols,red);
+C = newFilter(rows,cols,cyan);
+imshowpair(R,C,'montage')
+% Use Filters to Remove Opposite Color from Each Image
+% We can extract the cyan-toned image by filtering out all the red shades; and 
+% we can extract the red-tone image by filtering out all the cyan shades.
+
+Icyan = I - R;  % remove red
+Ired  = I - C;  % remove cyan
+imshowpair(Icyan,Ired,'montage')
+##### SOURCE END #####
+-->
+</div></body></html>
