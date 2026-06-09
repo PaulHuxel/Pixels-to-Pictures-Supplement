@@ -25,6 +25,9 @@ The supplemental lessons can be used in one of two ways:
 * [Lesson 8: Applying Masks using Face Detection](lessons/pdf/ApplyFaceMask.pdf)
 * [Lesson 9: Creating Video Montage and Flipbooks](lessons/pdf/AnimateSheet.pdf)
 
+## Webcam Pixelater App
+You can use the [Webcam Pixelater App](https://github.com/mathworks/Webcam-Pixelater-App) to apply the image filters you create to your webcam video feed!
+
 ##
 
 [![View Pixels to Pictures Supplemental Material on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/87452-pixels-to-pictures-supplemental-material)
